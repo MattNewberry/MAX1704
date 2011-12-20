@@ -35,6 +35,10 @@ void MAX1704::version(){
 
 }
 
+void MAX1704::setAlertLevel(int level){
+  
+}
+
 void MAX1704::performCommand(byte address, int value){
 
   Wire.beginTransmission(MAX1704_ADDR);

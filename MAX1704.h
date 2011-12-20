@@ -26,6 +26,7 @@ public:
   void powerOnReset();
   void quickStart();
   void version();
+  void setAlertLevel(int level);
     
 private:
   void performCommand(byte address, int value);
