@@ -10,15 +10,33 @@
 #include "MAX1704.h"
 #include "Wire.h"
 
-float MAX1704::stateOfCharge(void){
+float MAX1704::stateOfCharge(){
 
   int data[] = {};
   readFrom(MAX1704_SOC,2,data);
-  
+
   float fraction = data[1] / 256.0;
   float percentage = data[0] + fraction;
 
   return percentage;
+}
+
+void MAX1704::showConfig(){
+
+  int data[] = {};
+  readFrom(MAX1704_CONFIG,2,data);
+
+  byte sleep = (data[1] >>7) & 0x01;
+  byte alert = (data[1] >>5) & 0x01;
+  byte alertThreshold = data[1] & 0x1f;
+
+  Serial.print("Sleep = ");
+  Serial.println(sleep, HEX);
+  Serial.print("Alert = ");
+  Serial.println(alert, HEX);
+  Serial.print("Alert Threshold = ");
+  Serial.print(32-alertThreshold, DEC);
+  Serial.println("%");
 }
 
 void MAX1704::powerOnReset(){
@@ -35,8 +53,13 @@ void MAX1704::version(){
 
 }
 
-void MAX1704::setAlertLevel(int level){
-  
+void MAX1704::setAlertLevel(uint8_t level){
+
+  Wire.beginTransmission(MAX1704_ADDR);
+  Wire.write(MAX1704_CONFIG);
+  Wire.write(MAX1704_ALERT_LEVEL);
+  Wire.write(32 - level);
+  Wire.endTransmission();
 }
 
 void MAX1704::performCommand(byte address, int value){
@@ -45,7 +68,6 @@ void MAX1704::performCommand(byte address, int value){
   Wire.write(MAX1704_COMMAND);
   Wire.write(address);
   Wire.write(value);
-  
   Wire.endTransmission();
 }
 
@@ -66,4 +88,6 @@ void MAX1704::readFrom(byte address, int number, int* data){
 
   Wire.endTransmission();
 }
+
+
 

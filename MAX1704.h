@@ -18,15 +18,17 @@
 #define MAX1704_QUICK_START     0x40
 #define MAX1704_CONFIG          0x0C
 #define MAX1704_COMMAND         0xFE
+#define MAX1704_ALERT_LEVEL     0x97
 
 class MAX1704{
     
 public:
   float stateOfCharge();
+  void showConfig();
   void powerOnReset();
   void quickStart();
   void version();
-  void setAlertLevel(int level);
+  void setAlertLevel(uint8_t level);
     
 private:
   void performCommand(byte address, int value);
