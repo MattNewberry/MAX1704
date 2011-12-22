@@ -13,6 +13,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "Arduino.h"
 #include "Wire.h"
 #include "MAX1704.h"
 
@@ -23,8 +24,11 @@ void setup(){
  Wire.begin(); 
  Serial.begin(9600);
  
+ Serial.println("Starting up...");
+ delay(1000);
  fuelGauge.quickStart();
  fuelGauge.powerOnReset();
+ fuelGauge.showConfig();
 }
 
 void loop(){

@@ -23,19 +23,16 @@ float MAX1704::stateOfCharge(){
 
 void MAX1704::showConfig(){
 
-  int data[] = {};
-  readFrom(MAX1704_CONFIG,2,data);
-
-  byte sleep = (data[1] >>7) & 0x01;
-  byte alert = (data[1] >>5) & 0x01;
-  byte alertThreshold = data[1] & 0x1f;
+  int threshold = alertThreshold();
+  boolean sleep = isSleeping();
+  boolean alert = isAlerting();
 
   Serial.print("Sleep = ");
   Serial.println(sleep, HEX);
   Serial.print("Alert = ");
   Serial.println(alert, HEX);
   Serial.print("Alert Threshold = ");
-  Serial.print(32-alertThreshold, DEC);
+  Serial.print(threshold, DEC);
   Serial.println("%");
 }
 
@@ -53,13 +50,43 @@ void MAX1704::version(){
 
 }
 
-void MAX1704::setAlertLevel(uint8_t level){
+void MAX1704::setAlertThreshold(uint8_t level){
 
   Wire.beginTransmission(MAX1704_ADDR);
   Wire.write(MAX1704_CONFIG);
   Wire.write(MAX1704_ALERT_LEVEL);
   Wire.write(32 - level);
   Wire.endTransmission();
+}
+
+int MAX1704::alertThreshold(){
+ 
+ int data[] = {};
+  readFrom(MAX1704_CONFIG,2,data);
+
+  byte alertThreshold = data[1] & 0x1f; 
+  
+  return int(32 - alertThreshold);
+}
+
+boolean MAX1704::isAlerting(){
+  
+  int data[] = {};
+  readFrom(MAX1704_CONFIG,2,data);
+
+  byte alert = (data[1] >>5) & 0x01;
+  
+  return int(alert) == 1;
+}
+
+boolean MAX1704::isSleeping(){
+ 
+ int data[] = {};
+  readFrom(MAX1704_CONFIG,2,data);
+
+ byte sleep = (data[1] >>7) & 0x01; 
+  
+  return int(sleep) == 1;
 }
 
 void MAX1704::performCommand(byte address, int value){

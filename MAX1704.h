@@ -28,7 +28,11 @@ public:
   void powerOnReset();
   void quickStart();
   void version();
-  void setAlertLevel(uint8_t level);
+  void setAlertThreshold(uint8_t level);
+  int alertThreshold();
+  boolean isSleeping();
+  boolean isAlerting();
+  
     
 private:
   void performCommand(byte address, int value);
