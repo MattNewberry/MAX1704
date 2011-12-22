@@ -118,14 +118,9 @@ boolean MAX1704::isSleeping(){
 
 void MAX1704::sleep(){
   
-  Wire.beginTransmission(MAX1704_ADDR);
-  Wire.write(MAX1704_CONFIG);
-  Wire.write(MAX1704_ALERT_LEVEL);
-  Wire.write(32 - level);
-  Wire.endTransmission();
 }
 
-void MAX1704:awake(){
+void MAX1704::awake(){
  
   
 }
