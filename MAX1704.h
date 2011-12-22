@@ -1,10 +1,20 @@
-//
-//  MAX1704.h
-//  
-//
-//  Created by Matthew Newberry on 12/18/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
-//
+/**************************************************************************
+ *                                                                         *
+ * MAX1704* Driver for Arduino                                             *
+ *                                                                         *
+ * Matthew Newberry                                                        *
+ * mattnewberry@me.com                                                     *
+ *                                                                         *
+ ***************************************************************************
+ *                                                                         * 
+ * This program is free software; you can redistribute it and/or modify    *
+ * it under the terms of the GNU License.                                  *
+ * This program is distributed in the hope that it will be useful,         *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ * GNU License V2 for more details.                                        *
+ *                                                                         *
+ ***************************************************************************/
 
 #include "Arduino.h"
 
@@ -25,18 +35,20 @@ class MAX1704{
 public:
   float stateOfCharge();
   void showConfig();
-  void powerOnReset();
+  void reset();
   void quickStart();
-  void version();
+  char version();
   void setAlertThreshold(uint8_t level);
   int alertThreshold();
   boolean isSleeping();
   boolean isAlerting();
+  void sleep();
+  void awake();
   
     
 private:
   void performCommand(byte address, int value);
-  void readFrom(byte address, int number, int* data);
+  void readFrom(byte address, byte &msb, byte &lsb);
 };
 
 #endif
