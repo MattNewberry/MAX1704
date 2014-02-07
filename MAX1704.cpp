@@ -117,12 +117,44 @@ boolean MAX1704::isSleeping(){
 }
 
 void MAX1704::sleep(){
-  
+  byte msb = 0;
+  byte lsb = 0;
+
+  // Get the current config so we don't wipe any previous settings
+  readFrom(MAX1704_CONFIG,msb,lsb);
+
+  // Set SLEEP config bit to 1 to enable
+  lsb |= (1<<7);
+
+  // Update config
+  Wire.beginTransmission(MAX1704_ADDR);
+  Wire.write(MAX1704_CONFIG);
+  Wire.write(msb);
+  Wire.write(lsb);
+  Wire.endTransmission();
+
+  // This delay is here to ensure it's fully asleep before moving on
+  delay(150);
 }
 
 void MAX1704::awake(){
- 
-  
+  byte msb = 0;
+  byte lsb = 0;
+
+  // Get the current config so we don't wipe any previous settings
+  readFrom(MAX1704_CONFIG,msb,lsb);
+  // Set SLEEP config bit to 0 to disable
+  lsb &= ~(1<<7);
+
+  // Update config
+  Wire.beginTransmission(MAX1704_ADDR);
+  Wire.write(MAX1704_CONFIG);
+  Wire.write(msb);
+  Wire.write(lsb);
+  Wire.endTransmission();
+
+  // This delay is here to ensure it's fully awake before moving on
+  delay(150); 
 }
 
 void MAX1704::performCommand(byte address, int value){
